@@ -434,7 +434,13 @@
     .summary-grid { grid-template-columns: 1fr; }
   }
 
-  /* ── TOAST ── */
+  .chart-container{
+  position:relative;
+  height:250px;
+  width:100%;
+}
+
+/* ── TOAST ── */
   #toast {
     position: fixed;
     bottom: 30px;
@@ -606,7 +612,7 @@
 
       <!-- CHART TRANSAKSI TERBESAR -->
       <div class="card sidebar-card">
-        <div class="card-title"><i class="fas fa-chart-line"></i> Tren Keuangan</div><canvas id="financeChart" height="220"></canvas>
+        <div class="card-title"><i class="fas fa-chart-line"></i> Tren Keuangan</div><div class="chart-container"><canvas id="financeChart"></canvas></div>
       </div>
 
       <!-- TIPS -->
@@ -699,25 +705,6 @@
     document.getElementById('ratioPctInc').textContent = pInc + '%';
     document.getElementById('ratioPctExp').textContent = pExp + '%';
 
-    // mini chart
-    const mc = document.getElementById('miniChart');
-    if (transactions.length === 0) {
-      mc.innerHTML = '<p style="font-size:0.82rem;color:var(--text-light);text-align:center;padding:20px 0">Belum ada data</p>';
-    } else {
-      const top5 = [...transactions].sort((a,b) => b.amount - a.amount).slice(0, 5);
-      const maxAmt = top5[0].amount;
-      mc.innerHTML = top5.map(t => `
-        <div class="chart-bar-row">
-          <div class="chart-bar-label" title="${t.title}">${t.title}</div>
-          <div class="chart-bar-track">
-            <div class="chart-bar-fill ${t.type}" style="width:${Math.round(t.amount/maxAmt*100)}%"></div>
-          </div>
-          <div class="chart-bar-val">${fmt(t.amount)}</div>
-        </div>
-      `).join('');
-    }
-
-
     const currentMonth = new Date().getMonth();
     const monthTransactions = transactions.filter(t => new Date(t.date).getMonth() === currentMonth);
     document.getElementById('monthTotalTrx').textContent = monthTransactions.length;
@@ -737,7 +724,7 @@
     const expenseData = labels.map(m=>monthlyData[m].expense);
 
     const ctx = document.getElementById('financeChart');
-    if(ctx){
+    if(ctx && labels.length > 0){
       if(financeChart) financeChart.destroy();
       financeChart = new Chart(ctx,{
         type:'line',
@@ -745,7 +732,7 @@
           {label:'Pemasukan',data:incomeData,borderColor:'#22c55e',tension:0.4},
           {label:'Pengeluaran',data:expenseData,borderColor:'#ef4444',tension:0.4}
         ]},
-        options:{responsive:true,maintainAspectRatio:false}
+        options:{responsive:true,maintainAspectRatio:true,aspectRatio:2}
       });
     }
 
