@@ -453,6 +453,7 @@
 
   #toast.show { transform: translateX(-50%) translateY(0); }
 </style>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 
@@ -529,6 +530,18 @@
               <label>Tanggal</label>
               <input type="date" id="date" required>
             </div>
+            <div class="form-group">
+              <label>Kategori</label>
+              <select id="category" required>
+                <option value="Makanan">🍔 Makanan</option>
+                <option value="Transport">🚌 Transport</option>
+                <option value="Belanja">🛒 Belanja</option>
+                <option value="Tagihan">📄 Tagihan</option>
+                <option value="Hiburan">🎮 Hiburan</option>
+                <option value="Gaji">💰 Gaji</option>
+                <option value="Lainnya">📦 Lainnya</option>
+              </select>
+            </div>
             <div class="type-toggle" id="typeToggle">
               <button type="button" class="type-btn active-income" data-val="income" onclick="selectType('income')">
                 <i class="fas fa-arrow-down"></i> Pemasukan
@@ -582,12 +595,18 @@
         </div>
       </div>
 
+      <div class="card sidebar-card">
+        <div class="card-title"><i class="fas fa-chart-line"></i> Bulan Ini</div>
+        <div id="monthlyStats">
+          <div class="tip-item"><i class="fas fa-list"></i> Total Transaksi: <strong id="monthTotalTrx">0</strong></div>
+          <div class="tip-item"><i class="fas fa-calendar-day"></i> Rata-rata Harian: <strong id="avgDaily">Rp 0</strong></div>
+          <div class="tip-item"><i class="fas fa-arrow-trend-down"></i> Pengeluaran Terbesar: <strong id="largestExpense">-</strong></div>
+        </div>
+      </div>
+
       <!-- CHART TRANSAKSI TERBESAR -->
       <div class="card sidebar-card">
-        <div class="card-title"><i class="fas fa-chart-bar"></i> Transaksi Terbesar</div>
-        <div class="mini-chart-wrap" id="miniChart">
-          <p style="font-size:0.82rem;color:var(--text-light);text-align:center;padding:20px 0">Belum ada data</p>
-        </div>
+        <div class="card-title"><i class="fas fa-chart-line"></i> Tren Keuangan</div><canvas id="financeChart" height="220"></canvas>
       </div>
 
       <!-- TIPS -->
@@ -650,6 +669,7 @@
 
   // ── TRANSACTIONS ──
   let transactions = JSON.parse(localStorage.getItem('transactions')) || [];
+  let financeChart = null;
 
   function fmt(n) { return 'Rp ' + Number(n).toLocaleString('id-ID'); }
 
@@ -697,6 +717,38 @@
       `).join('');
     }
 
+
+    const currentMonth = new Date().getMonth();
+    const monthTransactions = transactions.filter(t => new Date(t.date).getMonth() === currentMonth);
+    document.getElementById('monthTotalTrx').textContent = monthTransactions.length;
+    const totalMonthAmount = monthTransactions.reduce((s,t)=>s+Number(t.amount),0);
+    document.getElementById('avgDaily').textContent = fmt(Math.round(totalMonthAmount/Math.max(new Date().getDate(),1)));
+    const biggestExpense = monthTransactions.filter(t=>t.type==='expense').sort((a,b)=>b.amount-a.amount)[0];
+    document.getElementById('largestExpense').textContent = biggestExpense ? biggestExpense.title : '-';
+
+    const monthlyData = {};
+    transactions.forEach(t=>{
+      const m = new Date(t.date).toLocaleDateString('id-ID',{month:'short'});
+      monthlyData[m] ??= {income:0,expense:0};
+      monthlyData[m][t.type] += Number(t.amount);
+    });
+    const labels = Object.keys(monthlyData);
+    const incomeData = labels.map(m=>monthlyData[m].income);
+    const expenseData = labels.map(m=>monthlyData[m].expense);
+
+    const ctx = document.getElementById('financeChart');
+    if(ctx){
+      if(financeChart) financeChart.destroy();
+      financeChart = new Chart(ctx,{
+        type:'line',
+        data:{labels,datasets:[
+          {label:'Pemasukan',data:incomeData,borderColor:'#22c55e',tension:0.4},
+          {label:'Pengeluaran',data:expenseData,borderColor:'#ef4444',tension:0.4}
+        ]},
+        options:{responsive:true,maintainAspectRatio:false}
+      });
+    }
+
     // list
     if (transactions.length === 0) {
       list.innerHTML = `<li class="empty-state"><i class="fas fa-inbox"></i><p>Belum ada transaksi. Tambah transaksi pertamamu!</p></li>`;
@@ -714,7 +766,7 @@
         </div>
         <div class="trx-info">
           <div class="trx-title">${t.title}</div>
-          <div class="trx-date">${t.date}</div>
+          <div class="trx-date">${t.date} • ${t.category || 'Lainnya'}</div>
         </div>
         <div class="trx-amount ${t.type}">${t.type === 'income' ? '+' : '-'} ${fmt(t.amount)}</div>
         <button class="trx-delete" title="Hapus" onclick="del(${idx})">
@@ -731,8 +783,9 @@
     const amount = document.getElementById('amount').value;
     const date   = document.getElementById('date').value;
     const type   = document.getElementById('type').value;
+    const category = document.getElementById('category').value;
     if (!title || !amount || !date) return;
-    transactions.push({ title, amount: Number(amount), date, type });
+    transactions.push({ title, amount: Number(amount), date, type, category });
     localStorage.setItem('transactions', JSON.stringify(transactions));
     render();
     this.reset();
