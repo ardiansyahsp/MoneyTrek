@@ -1,63 +1,82 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - MoneyTracker</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login — MoneyTracker</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
 
 <section class="login-page">
 
-    <div class="login-card">
-
-        <div class="login-logo">
-            <i class="fas fa-wallet"></i>
-            <h2>MoneyTracker</h2>
-            <p>Masuk ke akun Anda</p>
-        </div>
-
-        <form id="loginForm" novalidate>
-
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input
-                    type="email"
-                    id="email"
-                    placeholder="contoh@email.com"
-                    required>
-                <small class="error" id="emailError"></small>
-            </div>
-
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input
-                    type="password"
-                    id="password"
-                    placeholder="Minimal 8 karakter"
-                    required>
-                <small class="error" id="passwordError"></small>
-            </div>
-
-            <div class="checkbox-group">
-                <input type="checkbox" id="agree">
-                <label for="agree">
-                    Saya setuju dengan ketentuan
-                </label>
-            </div>
-            <small class="error" id="agreeError"></small>
-
-            <button type="submit" class="login-btn">
-                Login
-            </button>
-
-            <p class="success" id="successMsg"></p>
-
-        </form>
+  <!-- LEFT PANEL -->
+  <div class="login-left">
+    <div class="login-brand">
+      <div class="login-brand-logo">
+        <div class="lw"><i class="fas fa-wallet"></i></div>
+        <span>MoneyTracker</span>
+      </div>
+      <h1>Kontrol penuh atas <span class="green-word">keuanganmu.</span></h1>
+      <p>Catat setiap transaksi, analisis pengeluaran, dan wujudkan tujuan finansialmu bersama MoneyTracker.</p>
     </div>
+    <div class="login-features">
+      <div class="lf-item">
+        <i class="fas fa-chart-pie"></i>
+        Visualisasi pengeluaran dengan grafik interaktif
+      </div>
+      <div class="lf-item">
+        <i class="fas fa-bolt"></i>
+        Catat transaksi dalam hitungan detik
+      </div>
+      <div class="lf-item">
+        <i class="fas fa-shield-halved"></i>
+        Data tersimpan aman di browser kamu
+      </div>
+      <div class="lf-item">
+        <i class="fas fa-star"></i>
+        100% gratis, selamanya
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL -->
+  <div class="login-right">
+    <div class="login-right-header">
+      <h2>Selamat datang 👋</h2>
+      <p>Masuk ke akun MoneyTracker kamu</p>
+    </div>
+
+    <form id="loginForm" novalidate>
+
+      <div class="form-group">
+        <label for="email">Alamat Email</label>
+        <input type="email" id="email" placeholder="nama@email.com" required autocomplete="email">
+        <small class="error" id="emailError"></small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Minimal 8 karakter" required autocomplete="current-password">
+        <small class="error" id="passwordError"></small>
+      </div>
+
+      <div class="checkbox-group">
+        <input type="checkbox" id="agree">
+        <label for="agree">Saya menyetujui syarat & ketentuan penggunaan</label>
+      </div>
+      <small class="error" id="agreeError"></small>
+
+      <button type="submit" class="login-btn">
+        Masuk ke Dashboard
+      </button>
+
+      <p class="success" id="successMsg"></p>
+
+    </form>
+  </div>
+
 </section>
 
 <script src="script.js"></script>
