@@ -649,6 +649,110 @@ header {
 .tip-row:last-child { margin-bottom: 0; }
 .tip-row i { color: var(--emerald); margin-top: 1px; flex-shrink: 0; }
 
+/* ── CUSTOM MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13,17,23,0.45);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.modal-overlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.modal-box {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 32px 28px 24px;
+  width: 340px;
+  max-width: 90vw;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.14), 0 4px 16px rgba(0,0,0,0.08);
+  transform: scale(0.92) translateY(10px);
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: center;
+}
+
+.modal-overlay.show .modal-box {
+  transform: scale(1) translateY(0);
+}
+
+.modal-icon {
+  width: 56px; height: 56px;
+  background: var(--red-soft);
+  border-radius: 16px;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 18px;
+  color: var(--red);
+  font-size: 1.4rem;
+}
+
+.modal-title {
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: -0.3px;
+  margin-bottom: 8px;
+}
+
+.modal-desc {
+  font-size: 0.82rem;
+  color: var(--muted-2);
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+
+.modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.modal-btn {
+  padding: 11px;
+  border-radius: 12px;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+}
+
+.modal-btn.cancel {
+  background: var(--bg);
+  color: var(--muted-2);
+  border: 1.5px solid var(--line);
+}
+
+.modal-btn.cancel:hover {
+  background: #e5e7eb;
+  color: var(--ink);
+}
+
+.modal-btn.confirm {
+  background: var(--red);
+  color: white;
+  box-shadow: 0 4px 12px rgba(244,63,94,0.25);
+}
+
+.modal-btn.confirm:hover {
+  background: #e11d48;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(244,63,94,0.35);
+}
+
 /* ── TOAST ── */
 #toast {
   position: fixed;
@@ -764,7 +868,7 @@ header {
               <label>Tanggal</label>
               <input type="date" id="date" required>
             </div>
-            <div class="form-group">
+            <div class="form-group full">
               <label>Kategori</label>
               <select id="category">
                 <option value="Makanan">🍔 Makanan & Minum</option>
@@ -865,6 +969,21 @@ header {
         <div class="tip-row"><i class="fas fa-bullseye"></i> Tetapkan tujuan finansial yang jelas agar lebih termotivasi menabung.</div>
       </div>
 
+    </div>
+  </div>
+</div>
+
+<!-- CUSTOM DELETE MODAL -->
+<div class="modal-overlay" id="deleteModal">
+  <div class="modal-box">
+    <div class="modal-icon">
+      <i class="fas fa-trash-can"></i>
+    </div>
+    <div class="modal-title">Hapus Transaksi?</div>
+    <div class="modal-desc">Transaksi ini akan dihapus secara permanen dan tidak bisa dikembalikan.</div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeDeleteModal()">Batal</button>
+      <button class="modal-btn confirm" id="confirmDeleteBtn">Ya, Hapus</button>
     </div>
   </div>
 </div>
@@ -1053,13 +1172,31 @@ header {
     showToast('✓ Transaksi berhasil disimpan!');
   });
 
+  let pendingDeleteIndex = null;
+
   window.del = function(index) {
-    if (!confirm('Hapus transaksi ini?')) return;
-    transactions.splice(index, 1);
+    pendingDeleteIndex = index;
+    document.getElementById('deleteModal').classList.add('show');
+  };
+
+  window.closeDeleteModal = function() {
+    document.getElementById('deleteModal').classList.remove('show');
+    pendingDeleteIndex = null;
+  };
+
+  document.getElementById('confirmDeleteBtn').addEventListener('click', function() {
+    if (pendingDeleteIndex === null) return;
+    transactions.splice(pendingDeleteIndex, 1);
     localStorage.setItem('transactions', JSON.stringify(transactions));
     render();
+    closeDeleteModal();
     showToast('🗑 Transaksi dihapus');
-  };
+  });
+
+  // Close modal on overlay click
+  document.getElementById('deleteModal').addEventListener('click', function(e) {
+    if (e.target === this) closeDeleteModal();
+  });
 
   render();
 </script>
