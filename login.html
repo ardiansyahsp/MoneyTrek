@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login — MoneyTracker</title>
+  <title>Login & Daftar — MoneyTracker</title>
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -43,42 +43,293 @@
 
   <!-- RIGHT PANEL -->
   <div class="login-right">
-    <div class="login-right-header">
-      <h2>Selamat datang 👋</h2>
-      <p>Masuk ke akun MoneyTracker kamu</p>
+
+    <!-- TAB SWITCHER -->
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Masuk</button>
+      <button class="auth-tab" id="tabRegister" onclick="switchTab('register')">Daftar</button>
+      <div class="auth-tab-slider" id="tabSlider"></div>
     </div>
 
-    <form id="loginForm" novalidate>
-
-      <div class="form-group">
-        <label for="email">Alamat Email</label>
-        <input type="email" id="email" placeholder="nama@email.com" required autocomplete="email">
-        <small class="error" id="emailError"></small>
+    <!-- ═══════ LOGIN FORM ═══════ -->
+    <div id="panelLogin">
+      <div class="auth-header">
+        <h2>Selamat datang 👋</h2>
+        <p>Masuk ke akun MoneyTracker kamu</p>
       </div>
 
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Minimal 8 karakter" required autocomplete="current-password">
-        <small class="error" id="passwordError"></small>
+      <form id="loginForm" novalidate>
+        <div class="form-group">
+          <label for="loginEmail">Alamat Email</label>
+          <div class="input-wrap">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="loginEmail" placeholder="nama@email.com" required autocomplete="email">
+          </div>
+          <small class="error" id="loginEmailError"></small>
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <div class="input-wrap">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="loginPassword" placeholder="Minimal 8 karakter" required autocomplete="current-password">
+            <button type="button" class="toggle-pw" onclick="togglePw('loginPassword', this)" tabindex="-1">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <small class="error" id="loginPasswordError"></small>
+        </div>
+
+        <div class="checkbox-group">
+          <input type="checkbox" id="loginAgree">
+          <label for="loginAgree">Saya menyetujui syarat &amp; ketentuan penggunaan</label>
+        </div>
+        <small class="error" id="loginAgreeError"></small>
+
+        <button type="submit" class="login-btn">
+          <i class="fas fa-right-to-bracket"></i> Masuk ke Dashboard
+        </button>
+
+        <p class="success" id="loginSuccess"></p>
+      </form>
+
+      <p class="auth-switch-text">Belum punya akun? <a href="#" onclick="switchTab('register')">Daftar sekarang</a></p>
+    </div>
+
+    <!-- ═══════ REGISTER FORM ═══════ -->
+    <div id="panelRegister" style="display:none">
+      <div class="auth-header">
+        <h2>Buat akun baru ✨</h2>
+        <p>Mulai perjalanan finansialmu hari ini</p>
       </div>
 
-      <div class="checkbox-group">
-        <input type="checkbox" id="agree">
-        <label for="agree">Saya menyetujui syarat & ketentuan penggunaan</label>
-      </div>
-      <small class="error" id="agreeError"></small>
+      <form id="registerForm" novalidate>
+        <div class="form-group">
+          <label for="regName">Nama Lengkap</label>
+          <div class="input-wrap">
+            <i class="fas fa-user input-icon"></i>
+            <input type="text" id="regName" placeholder="Nama lengkap kamu" required autocomplete="name">
+          </div>
+          <small class="error" id="regNameError"></small>
+        </div>
 
-      <button type="submit" class="login-btn">
-        Masuk ke Dashboard
-      </button>
+        <div class="form-group">
+          <label for="regEmail">Alamat Email</label>
+          <div class="input-wrap">
+            <i class="fas fa-envelope input-icon"></i>
+            <input type="email" id="regEmail" placeholder="nama@email.com" required autocomplete="email">
+          </div>
+          <small class="error" id="regEmailError"></small>
+        </div>
 
-      <p class="success" id="successMsg"></p>
+        <div class="form-group">
+          <label for="regPhone">Nomor Telepon</label>
+          <div class="input-wrap">
+            <i class="fas fa-phone input-icon"></i>
+            <input type="tel" id="regPhone" placeholder="08xxxxxxxxxx" required autocomplete="tel">
+          </div>
+          <small class="error" id="regPhoneError"></small>
+        </div>
 
-    </form>
+        <div class="form-group">
+          <label for="regPassword">Password</label>
+          <div class="input-wrap">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="regPassword" placeholder="Minimal 8 karakter" required autocomplete="new-password">
+            <button type="button" class="toggle-pw" onclick="togglePw('regPassword', this)" tabindex="-1">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <small class="error" id="regPasswordError"></small>
+        </div>
+
+        <div class="form-group">
+          <label for="regConfirm">Konfirmasi Password</label>
+          <div class="input-wrap">
+            <i class="fas fa-lock input-icon"></i>
+            <input type="password" id="regConfirm" placeholder="Ulangi password" required autocomplete="new-password">
+            <button type="button" class="toggle-pw" onclick="togglePw('regConfirm', this)" tabindex="-1">
+              <i class="fas fa-eye"></i>
+            </button>
+          </div>
+          <small class="error" id="regConfirmError"></small>
+        </div>
+
+        <div class="pw-strength" id="pwStrengthWrap" style="display:none">
+          <div class="pw-strength-bar">
+            <div class="pw-strength-fill" id="pwStrengthFill"></div>
+          </div>
+          <span class="pw-strength-label" id="pwStrengthLabel"></span>
+        </div>
+
+        <div class="checkbox-group" style="margin-top:6px">
+          <input type="checkbox" id="regAgree">
+          <label for="regAgree">Saya menyetujui <a href="#" style="color:var(--emerald);font-weight:600">syarat &amp; ketentuan</a> penggunaan</label>
+        </div>
+        <small class="error" id="regAgreeError"></small>
+
+        <button type="submit" class="login-btn" style="margin-top:14px">
+          <i class="fas fa-user-plus"></i> Buat Akun Sekarang
+        </button>
+
+        <p class="success" id="registerSuccess"></p>
+      </form>
+
+      <p class="auth-switch-text">Sudah punya akun? <a href="#" onclick="switchTab('login')">Masuk di sini</a></p>
+    </div>
+
   </div>
-
 </section>
 
-<script src="script.js"></script>
+<script>
+  /* ── TAB SWITCHER ── */
+  function switchTab(tab) {
+    const isLogin = tab === 'login';
+    document.getElementById('panelLogin').style.display    = isLogin ? 'block' : 'none';
+    document.getElementById('panelRegister').style.display = isLogin ? 'none'  : 'block';
+    document.getElementById('tabLogin').classList.toggle('active', isLogin);
+    document.getElementById('tabRegister').classList.toggle('active', !isLogin);
+    document.getElementById('tabSlider').style.transform = isLogin ? 'translateX(0)' : 'translateX(100%)';
+    // clear messages on switch
+    document.querySelectorAll('.error, .success').forEach(el => el.textContent = '');
+  }
+
+  /* ── SHOW/HIDE PASSWORD ── */
+  function togglePw(id, btn) {
+    const inp = document.getElementById(id);
+    const icon = btn.querySelector('i');
+    if (inp.type === 'password') {
+      inp.type = 'text';
+      icon.classList.replace('fa-eye', 'fa-eye-slash');
+    } else {
+      inp.type = 'password';
+      icon.classList.replace('fa-eye-slash', 'fa-eye');
+    }
+  }
+
+  /* ── PASSWORD STRENGTH ── */
+  document.getElementById('regPassword').addEventListener('input', function() {
+    const val = this.value;
+    const wrap = document.getElementById('pwStrengthWrap');
+    const fill = document.getElementById('pwStrengthFill');
+    const label = document.getElementById('pwStrengthLabel');
+
+    if (!val) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'flex';
+
+    let score = 0;
+    if (val.length >= 8)  score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+
+    const levels = [
+      { pct: '25%', color: '#f43f5e', text: 'Lemah' },
+      { pct: '50%', color: '#f59e0b', text: 'Cukup' },
+      { pct: '75%', color: '#3b82f6', text: 'Kuat' },
+      { pct: '100%', color: '#059669', text: 'Sangat Kuat' },
+    ];
+    const lv = levels[score - 1] || levels[0];
+    fill.style.width = lv.pct;
+    fill.style.background = lv.color;
+    label.textContent = lv.text;
+    label.style.color = lv.color;
+  });
+
+  /* ── LOGIN VALIDATION ── */
+  document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let valid = true;
+    const email    = document.getElementById('loginEmail');
+    const password = document.getElementById('loginPassword');
+    const agree    = document.getElementById('loginAgree');
+    const emailErr = document.getElementById('loginEmailError');
+    const passErr  = document.getElementById('loginPasswordError');
+    const agreeErr = document.getElementById('loginAgreeError');
+    const success  = document.getElementById('loginSuccess');
+
+    emailErr.textContent = passErr.textContent = agreeErr.textContent = success.textContent = '';
+
+    const emailPat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.value.trim()) { emailErr.textContent = 'Email wajib diisi'; valid = false; }
+    else if (!emailPat.test(email.value)) { emailErr.textContent = 'Format email tidak valid'; valid = false; }
+
+    if (password.value.length < 8) { passErr.textContent = 'Password minimal 8 karakter'; valid = false; }
+
+    if (!agree.checked) { agreeErr.textContent = 'Centang persetujuan terlebih dahulu'; valid = false; }
+
+    if (valid) {
+      localStorage.setItem('userEmail', email.value);
+      success.textContent = '✓ Login berhasil! Mengalihkan...';
+      setTimeout(() => window.location.href = 'dashboard.html', 1000);
+    }
+  });
+
+  /* ── REGISTER VALIDATION ── */
+  document.getElementById('registerForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    let valid = true;
+
+    const name     = document.getElementById('regName');
+    const email    = document.getElementById('regEmail');
+    const phone    = document.getElementById('regPhone');
+    const password = document.getElementById('regPassword');
+    const confirm  = document.getElementById('regConfirm');
+    const agree    = document.getElementById('regAgree');
+
+    const nameErr    = document.getElementById('regNameError');
+    const emailErr   = document.getElementById('regEmailError');
+    const phoneErr   = document.getElementById('regPhoneError');
+    const passErr    = document.getElementById('regPasswordError');
+    const confirmErr = document.getElementById('regConfirmError');
+    const agreeErr   = document.getElementById('regAgreeError');
+    const success    = document.getElementById('registerSuccess');
+
+    [nameErr, emailErr, phoneErr, passErr, confirmErr, agreeErr].forEach(el => el.textContent = '');
+    success.textContent = '';
+
+    const emailPat = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phonePat = /^(\+62|62|0)[0-9]{8,12}$/;
+
+    if (!name.value.trim() || name.value.trim().length < 2) {
+      nameErr.textContent = 'Nama lengkap minimal 2 karakter'; valid = false;
+    }
+    if (!email.value.trim()) {
+      emailErr.textContent = 'Email wajib diisi'; valid = false;
+    } else if (!emailPat.test(email.value)) {
+      emailErr.textContent = 'Format email tidak valid'; valid = false;
+    }
+    if (!phone.value.trim()) {
+      phoneErr.textContent = 'Nomor telepon wajib diisi'; valid = false;
+    } else if (!phonePat.test(phone.value.replace(/\s/g, ''))) {
+      phoneErr.textContent = 'Format nomor tidak valid (cth: 08123456789)'; valid = false;
+    }
+    if (password.value.length < 8) {
+      passErr.textContent = 'Password minimal 8 karakter'; valid = false;
+    }
+    if (confirm.value !== password.value) {
+      confirmErr.textContent = 'Konfirmasi password tidak cocok'; valid = false;
+    }
+    if (!agree.checked) {
+      agreeErr.textContent = 'Centang persetujuan terlebih dahulu'; valid = false;
+    }
+
+    if (valid) {
+      localStorage.setItem('userEmail', email.value);
+      localStorage.setItem('userName', name.value.trim());
+      success.textContent = '✓ Akun berhasil dibuat! Mengalihkan...';
+      setTimeout(() => window.location.href = 'dashboard.html', 1200);
+    }
+  });
+
+  /* ── REALTIME CLEAR ERRORS ── */
+  ['loginEmail','loginPassword','regName','regEmail','regPhone','regPassword','regConfirm'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('input', () => {
+      const errEl = document.getElementById(id.replace('login','login').replace('reg','reg') + 'Error');
+      if (errEl) errEl.textContent = '';
+    });
+  });
+</script>
 </body>
 </html>
