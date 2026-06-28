@@ -28,8 +28,23 @@ if (isset($_SESSION['user_id'])) {
       <li><a href="#team">Tim</a></li>
     </ul>
     <a href="auth/login.php" class="btn-cta-nav">Mulai Gratis →</a>
+    <button class="hamburger" id="hamburger" aria-label="Toggle Navigation">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
   </nav>
 </header>
+
+<!-- MOBILE NAV OVERLAY -->
+<div class="mobile-nav" id="mobileNav">
+  <ul>
+    <li><a href="#home" class="mobile-link">Beranda</a></li>
+    <li><a href="#about" class="mobile-link">Tentang</a></li>
+    <li><a href="#team" class="mobile-link">Tim</a></li>
+  </ul>
+  <a href="auth/login.php" class="btn-cta-nav" style="display:inline-block">Mulai Gratis →</a>
+</div>
 
 <main>
 

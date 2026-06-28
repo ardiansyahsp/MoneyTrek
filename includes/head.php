@@ -194,5 +194,124 @@ body { background: var(--bg-main); display: flex; justify-content: center; align
 .wallet-icon { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; font-size: 1.1rem; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
 .wallet-info { display: flex; flex-direction: column; }
 .wallet-name { font-size: 0.75rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;}
-.wallet-bal { font-size: 1rem; font-weight: 800; color: var(--text-dark); margin-top: 2px;}
+/* ═══════════════════════════════════════════
+   RESPONSIVE BREAKPOINTS (DASHBOARD)
+═══════════════════════════════════════════ */
+
+/* ── Tablet & Small Desktop (max 1024px) ── */
+@media (max-width: 1024px) {
+    .bento-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .right-stack {
+        grid-column: 1 / 3;
+        flex-direction: row;
+    }
+    .right-stack .card, .premium-card {
+        flex: 1;
+    }
+    .trx-card {
+        grid-column: 1 / 3;
+    }
+}
+
+/* ── Tablet Portrait & Mobile Landscape (max 768px) ── */
+@media (max-width: 768px) {
+    body { padding: 0; background: var(--app-bg); }
+    .app-window {
+        height: auto;
+        min-height: 100vh;
+        border-radius: 0;
+        padding: 0 0 80px 0; /* Space for bottom nav */
+        flex-direction: column;
+        box-shadow: none;
+    }
+    
+    /* SIDEBAR BECOMES BOTTOM NAV */
+    .sidebar {
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        width: 100%; height: 75px;
+        flex-direction: row;
+        border-radius: 24px 24px 0 0;
+        padding: 0 15px;
+        z-index: 1000;
+        box-shadow: 0 -10px 30px rgba(0,0,0,0.1);
+        align-items: center;
+        justify-content: space-between;
+    }
+    .sidebar-top { 
+        display: flex; flex: 1; 
+        flex-direction: row; align-items: center; 
+    }
+    .sidebar-logo { display: none; }
+    .nav-menu { 
+        flex-direction: row; 
+        width: 100%; 
+        justify-content: space-around; 
+        gap: 5px; 
+    }
+    .sidebar > .nav-menu:last-child { 
+        width: auto;
+        justify-content: flex-end;
+    }
+    
+    .main-content {
+        padding: 20px 15px;
+        overflow-y: visible;
+    }
+    
+    .top-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .header-right {
+        width: 100%;
+        justify-content: space-between;
+        gap: 12px;
+    }
+    .search-bar { flex: 1; width: auto; }
+    .search-bar:focus-within { width: auto; }
+    .avatars-group { display: none; }
+    
+    .bento-grid {
+        grid-template-columns: 1fr;
+    }
+    .trx-card, .right-stack {
+        grid-column: 1 / 2;
+    }
+    .right-stack {
+        flex-direction: column;
+    }
+    .wallet-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+/* ── Mobile Portrait (max 480px) ── */
+@media (max-width: 480px) {
+    .greeting h1 { font-size: 2.2rem; }
+    .balance-amount { font-size: 2.2rem; flex-wrap: wrap; }
+    .balance-label { width: 100%; margin-left: 0; margin-top: 5px; }
+    
+    .modal-box { padding: 25px 20px; width: 95%; max-height: 90vh; overflow-y: auto; }
+    .type-toggle { flex-direction: column; }
+    
+    .ei-stats { flex-direction: column; gap: 10px; text-align: left; }
+    .ei-stat { display: flex; align-items: center; gap: 10px; }
+    
+    .wallet-grid { grid-template-columns: 1fr; }
+    
+    /* Adjust trx item text size for small screen */
+    .trx-info h4 { font-size: 0.95rem; }
+    .trx-amount { font-size: 1rem; }
+    .trx-icon { width: 40px; height: 40px; font-size: 1.1rem; }
+    
+    /* Other Pages Adjustments */
+    .history-header { flex-direction: column; align-items: flex-start; gap: 10px; }
+    .history-container { padding: 20px; }
+    .card-list { padding: 20px; }
+    .settings-container { padding: 20px; }
+    .setting-item { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
 </style>

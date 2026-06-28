@@ -4,15 +4,38 @@ function showWelcome() {
 }
 
 // Efek Scroll Halus (Smooth Scroll) untuk navigasi
-document.querySelectorAll('.nav-links a').forEach(anchor => {
+document.querySelectorAll('.nav-links a, .mobile-link').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
+        
+        // Close mobile nav if open
+        const hamburger = document.getElementById('hamburger');
+        const mobileNav = document.getElementById('mobileNav');
+        if (hamburger && mobileNav && hamburger.classList.contains('open')) {
+            hamburger.classList.remove('open');
+            mobileNav.classList.remove('open');
+            document.body.classList.remove('nav-open');
+        }
+
         const targetId = this.getAttribute('href');
-        document.querySelector(targetId).scrollIntoView({
-            behavior: 'smooth'
-        });
+        if (targetId.startsWith('#')) {
+            document.querySelector(targetId).scrollIntoView({
+                behavior: 'smooth'
+            });
+        }
     });
 });
+
+// Hamburger Menu Logic
+const hamburgerBtn = document.getElementById('hamburger');
+const mobileNavOverlay = document.getElementById('mobileNav');
+if (hamburgerBtn && mobileNavOverlay) {
+    hamburgerBtn.addEventListener('click', () => {
+        hamburgerBtn.classList.toggle('open');
+        mobileNavOverlay.classList.toggle('open');
+        document.body.classList.toggle('nav-open');
+    });
+}
 
 
 window.addEventListener('scroll', () => {
